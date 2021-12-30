@@ -44,17 +44,20 @@ func HomeRoutes(router *gin.Engine) {
 		err := c.BindJSON(&transaction)
 		if err != nil {
 			c.AbortWithStatus(400)
+			return
 		}
 
 		decodedTransaction, err := base64.StdEncoding.DecodeString(transaction.Payload)
 		if err != nil {
 			c.AbortWithStatus(400)
+			return
 		}
 
 		var signedTxn types.SignedTxn
 		err = msgpack.Decode(decodedTransaction, &signedTxn)
 		if err != nil {
 			c.AbortWithStatus(400)
+			return
 		}
 
 		pubkey, err := GetPubKey(transaction.PubKey)
