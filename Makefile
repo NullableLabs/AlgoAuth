@@ -1,6 +1,5 @@
 #!make
-.DEFAULT_GOAL := build
-EXECUTABLE=YourPlace
+.DEFAULT_GOAL := build run
 ifeq ($(OS), Windows_NT)
 GO=C:\Program Files\Go\bin\go.exe
 NPX=C:\Program Files\nodejs\npx.cmd
