@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"crypto/ed25519"
 	"encoding/base32"
 	"encoding/base64"
@@ -69,10 +70,15 @@ func HomeRoutes(router *gin.Engine) {
 		fmt.Println("pubkey")
 		fmt.Println(pubkey)
 		fmt.Println("transaction")
-		fmt.Println(decodedTransaction)
+		fmt.Println(signedTxn.Txn)
+		var buf bytes.Buffer
+		buf.Write([]byte("TX"))
+		buf.Write(signedTxn.Txn)
+		fmt.Println("transaction + append")
+		fmt.Println(buf.Bytes())
 		fmt.Println("sig")
 		fmt.Println(signedTxn.Sig[:])
-		ret := ed25519.Verify(pubkey, decodedTransaction, signedTxn.Sig[:])
+		ret := ed25519.Verify(pubkey, buf.Bytes(), signedTxn.Sig[:])
 		if ret {
 			c.JSON(200, `{"status": "validated"}`)
 			return
