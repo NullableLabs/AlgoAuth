@@ -67,22 +67,32 @@ func HomeRoutes(router *gin.Engine) {
 			return
 		}
 
-		fmt.Println("pubkey")
+		fmt.Println("--- pubkey ---")
 		fmt.Println(pubkey)
-		fmt.Println("transaction")
+
+		fmt.Println("--- msgpack transaction (decodedTransaction) ---")
+		fmt.Println(decodedTransaction)
+
+		fmt.Println("--- transaction (signedTxn.Txn) ---")
 		fmt.Println(signedTxn.Txn)
+
+		fmt.Println("--- transaction + separator ---")
+		domainSeparator := []byte("TX")
 		var buf bytes.Buffer
-		buf.Write([]byte("TX"))
-		buf.Write(signedTxn.Txn)
-		fmt.Println("transaction + append")
+		buf.Write(domainSeparator)
+		buf.Write(decodedTransaction)
 		fmt.Println(buf.Bytes())
-		fmt.Println("sig")
+
+		fmt.Println("--- sig ---")
 		fmt.Println(signedTxn.Sig[:])
+
 		ret := ed25519.Verify(pubkey, buf.Bytes(), signedTxn.Sig[:])
 		if ret {
+			fmt.Println("signature validated")
 			c.JSON(200, `{"status": "validated"}`)
 			return
 		}
+		fmt.Println("signature not validated")
 		c.JSON(400, `{"status": "not validated"}`)
 	})
 }
