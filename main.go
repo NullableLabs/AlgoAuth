@@ -48,12 +48,14 @@ func HomeRoutes(router *gin.Engine) {
 			return
 		}
 
+		// decoded the transaction, as the payload comes base64 encoded from the Typescript client
 		decodedTransaction, err := base64.StdEncoding.DecodeString(transaction.Payload)
 		if err != nil {
 			c.AbortWithStatus(400)
 			return
 		}
 
+		// decode the transaction with msgpack
 		var signedTxn types.SignedTxn
 		err = msgpack.Decode(decodedTransaction, &signedTxn)
 		if err != nil {
@@ -61,35 +63,18 @@ func HomeRoutes(router *gin.Engine) {
 			return
 		}
 
+		// parse the pubkey from the Algo address
 		pubkey, err := GetPubKey(transaction.PubKey)
 		if err != nil {
 			c.AbortWithStatus(400)
 			return
 		}
 
-		fmt.Println("--- pubkey (ed25519.PublicKey) ---")
-		fmt.Println(pubkey)
+		fmt.Println("pubkey = ", pubkey)
+		fmt.Println("decoded transaction = ", signedTxn.Txn)
+		fmt.Println("signature", signedTxn.Sig[:])
 
-		fmt.Println("--- msgpack transaction ([]byte) ---")
-		fmt.Println(decodedTransaction)
-
-		fmt.Println("--- signed transaction (types.SignedTxn)")
-		fmt.Println(signedTxn)
-
-		fmt.Println("--- transaction (signedTxn.Txn) ---")
-		fmt.Println(signedTxn.Txn)
-
-		fmt.Println("--- msgpack transaction + domain separator ([]byte) ---")
-		domainSeparator := []byte("TX")
-		var buf bytes.Buffer
-		buf.Write(domainSeparator)
-		buf.Write(decodedTransaction)
-		fmt.Println(buf.Bytes())
-
-		fmt.Println("--- sig ---")
-		fmt.Println(signedTxn.Sig[:])
-
-		ret := ed25519.Verify(pubkey, signedTxn, signedTxn.Sig[:])
+		ret := rawVerifyTransaction(pubkey, signedTxn.Txn, signedTxn.Sig[:])
 		if ret {
 			fmt.Println("signature validated")
 			c.JSON(200, `{"status": "validated"}`)
@@ -98,6 +83,13 @@ func HomeRoutes(router *gin.Engine) {
 		fmt.Println("signature not validated")
 		c.JSON(400, `{"status": "not validated"}`)
 	})
+}
+
+func rawVerifyTransaction(pk ed25519.PublicKey, message, signature []byte) bool {
+	msgParts := [][]byte{[]byte("TX"), message}
+	toBeVerified := bytes.Join(msgParts, nil)
+	fmt.Println(toBeVerified)
+	return ed25519.Verify(pk, toBeVerified, signature)
 }
 
 func main() {
