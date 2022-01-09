@@ -85,7 +85,7 @@ func HomeRoutes(router *gin.Engine) {
 
 func rawVerifyTransaction(pubkey ed25519.PublicKey, transaction types.Transaction, sig []byte) bool {
 	note := transaction.Note
-	if bytes.Equal(note, []byte("abc")) { // implement your own note / nonce validation here
+	if bytes.Equal(note, []byte("website.URL & nonce")) { // implement your own note / nonce validation here
 		return false
 	}
 	domainSeparator := []byte("TX")
