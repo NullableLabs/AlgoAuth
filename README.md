@@ -14,8 +14,13 @@ The transaction never needs to be submitted to the network, so it costs users ze
 
 ### Production Readiness
 This code is a proof-of-concept, and is not intended to be production ready. Some things that are left to the implementing developer:
-* It currently only works in testnet, so you'll need to change to mainnet - https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L56
-* Add a per-session nonce to the transaction payload, to prevent re-use - https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L66
-* Adding in your own address for the transaction to sign - https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L49
-* Implement your own application-specific cookie logic - https://github.com/NullableLabs/AlgoAuth/blob/main/main.go#L99
+* It currently only works in testnet, so you'll need to change to mainnet
+  * https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L56
+* Add a per-session nonce to the transaction payload, to prevent signed transaction re-use
+  * https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L66
+  * 
+* Adding in your own address for the transaction to sign
+  * https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L49
+* Implement your own application-specific cookie logic
+  * https://github.com/NullableLabs/AlgoAuth/blob/main/main.go#L99
 * Check for old signed Algorand transactions
