@@ -18,3 +18,4 @@ This code is a proof-of-concept, and is not intended to be production ready. Som
 * Add a per-session nonce to the transaction payload, to prevent re-use - https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L66
 * Adding in your own address for the transaction to sign - https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L49
 * Implement your own application-specific cookie logic - https://github.com/NullableLabs/AlgoAuth/blob/main/main.go#L99
+* Check for old or outdated signed Algorand transactions
