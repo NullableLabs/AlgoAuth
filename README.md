@@ -9,3 +9,5 @@ This allows a front-end WalletConnect application to request that a wallet sign 
 This turns a validated WalletConnect transaction, into an HTTP session cookie that the web application can use as a durable session token.
 
 WalletConnect > Algo Wallet > SignedTxn > HTTP POST > Go HTTP server > SignedTxn validation > Return Cookie
+
+The transaction never needs to be submitted to the network, so it costs users zero Algo to authenticate
