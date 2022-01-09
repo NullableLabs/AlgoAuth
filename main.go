@@ -70,13 +70,11 @@ func HomeRoutes(router *gin.Engine) {
 			return
 		}
 
-		fmt.Println("pubkey = ", pubkey)
-		fmt.Println("decoded transaction = ", signedTxn.Txn)
-		fmt.Println("signature", signedTxn.Sig[:])
-
 		ret := rawVerifyTransaction(pubkey, signedTxn.Txn, signedTxn.Sig[:])
 		if ret {
 			fmt.Println("signature validated")
+			cookie := createCookie(pubkey)
+			http.SetCookie(c.Writer, &http.Cookie{Name: "session", Value: cookie, MaxAge: -1, HttpOnly: true})
 			c.JSON(200, `{"status": "validated"}`)
 			return
 		}
@@ -85,11 +83,21 @@ func HomeRoutes(router *gin.Engine) {
 	})
 }
 
-func rawVerifyTransaction(pk ed25519.PublicKey, message, signature []byte) bool {
-	msgParts := [][]byte{[]byte("TX"), message}
-	toBeVerified := bytes.Join(msgParts, nil)
-	fmt.Println(toBeVerified)
-	return ed25519.Verify(pk, toBeVerified, signature)
+func rawVerifyTransaction(pubkey ed25519.PublicKey, transaction types.Transaction, sig []byte) bool {
+	domainSeparator := []byte("TX")
+	encodedTxn := msgpack.Encode(transaction)
+	msgParts := [][]byte{domainSeparator, encodedTxn}
+	toVerify := bytes.Join(msgParts, nil)
+	ret := ed25519.Verify(pubkey, toVerify, sig)
+	if ret {
+		return true
+	}
+	return false
+}
+
+func createCookie(pubkey ed25519.PublicKey) string {
+	// Implement your cookie logic here
+	return "abcd123"
 }
 
 func main() {
