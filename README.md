@@ -18,7 +18,7 @@ This code is a proof-of-concept, and is not intended to be production ready. Som
   * https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L56
 * Add a per-session nonce to the transaction payload, to prevent signed transaction re-use
   * https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L66
-  * 
+  * https://github.com/NullableLabs/AlgoAuth/blob/main/main.go#L88
 * Adding in your own address for the transaction to sign
   * https://github.com/NullableLabs/AlgoAuth/blob/main/src/typescript/wallet.ts#L49
 * Implement your own application-specific cookie logic
