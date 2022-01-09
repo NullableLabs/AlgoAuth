@@ -47,9 +47,9 @@ async function startAuth() {
     const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
         from: connectedAddress,
         to: "KLUCTEDQNCJJBX37RJULE5SMHQKIEAPMIJAO3UT6K3HSU6NSI2RBIVZHYU",
-        amount: 100000,
+        amount: 0o00000,
         suggestedParams: {
-            fee: 1000,  // microalgos
+            fee: 0o000,  // microalgos
             flatFee: true,
             firstRound: 10000,
             lastRound: 10200,
@@ -63,7 +63,7 @@ async function startAuth() {
         const encodedTxn = Buffer.from(algosdk.encodeUnsignedTransaction(txn)).toString("base64");
         return {
             txn: encodedTxn,
-            message: 'website.URL',
+            message: 'website.URL & nonce',  // developers will need to inject their own nonce here to prevent txn re-use
         };
     });
 
