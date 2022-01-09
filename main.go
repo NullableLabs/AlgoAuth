@@ -74,7 +74,7 @@ func HomeRoutes(router *gin.Engine) {
 		if ret {
 			fmt.Println("signature validated")
 			cookie := createCookie(pubkey)
-			http.SetCookie(c.Writer, &http.Cookie{Name: "session", Value: cookie, MaxAge: -1, HttpOnly: true})
+			http.SetCookie(c.Writer, &http.Cookie{Name: "session", Value: cookie, MaxAge: 500, HttpOnly: true})
 			c.JSON(200, `{"status": "validated"}`)
 			return
 		}
